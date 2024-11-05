@@ -1,13 +1,16 @@
 <?php
 
+use App\Http\Controllers\CRUDController;
 use Illuminate\Support\Facades\Route;
+
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/crud', function () {
-    return view('crud');
+Route::controller(CRUDController::class)->prefix('/crud')->group(function () {
+    Route::get('/', 'index')->name('crud.index');
+    Route::post('/store', 'store')->name('crud.store');
 });
 
 

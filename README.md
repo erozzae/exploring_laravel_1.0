@@ -19,3 +19,11 @@
     <li>multi role with middleware</li>
     <li>crud with image</li>
 </ul>
+<br>
+<h3>env configuration</h3>
+<ul>
+    <li>FILESYSTEM_DISK=public</li>
+</ul>
+
+
+
