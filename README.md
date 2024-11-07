@@ -23,7 +23,14 @@
 <h3>env configuration</h3>
 <ul>
     <li>FILESYSTEM_DISK=public</li>
+    <li>download and put lightbox2 package in public disk</li>
 </ul>
+<br>
+<h3>other configuration</h3>
+<ul>
+    <li>download and put lightbox2 package in public disk</li>
+</ul>
+
 
 
 
