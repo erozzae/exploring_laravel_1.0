@@ -10,11 +10,10 @@
                 </ol>
                 <div class="card mb-4">
                     <div class="btn-add m-2">
-                        <button type="button" class="btn btn-sm btn-primary float-end" data-bs-toggle="modal"
-                            data-bs-target="#form_add">
+                        <button type="button" class="btn_modal btn btn-sm btn-primary float-end">
                             Add Data
                         </button>
-
+                        {{-- Modal --}}
                         <div class="modal modal-md fade" id="form_add" tabindex="-1" aria-labelledby="exampleModalLabel"
                             aria-hidden="true">
                             <div class="modal-dialog">
@@ -24,24 +23,20 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                     </div>
-                                    <form action="" method="POST" enctype="multipart/form-data">
+                                    <form id="formData" action="" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         <div class="modal-body">
                                             <div class="mb-3">
-                                                <input class="form-control form-control-sm" type="text" name="name"
-                                                    placeholder="brand's name">
+                                                <input class="form-control form-control-sm" type="text" id="name"
+                                                    name="name" placeholder="brand's name">
                                             </div>
                                             <div class="mb-3">
-                                                <input class="form-control form-control-sm" type="text" name="location"
-                                                    placeholder="brand's location">
+                                                <input class="form-control form-control-sm" type="text" id="location"
+                                                    name="location" placeholder="brand's location">
                                             </div>
-                                            {{-- <div class="mb-3">
-                                                <label for="formFile" class="form-label">book's image</label>
-                                                <input class="form-control form-control-sm" name="image" type="file">
-                                            </div> --}}
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                                            <button type="submit" class="btn-submit btn btn-sm btn-primary">Submit</button>
                                             <button type="button" class="btn btn-sm btn-danger"
                                                 data-bs-dismiss="modal">Cancel</button>
                                         </div>
@@ -88,6 +83,7 @@
 
 
 @section('js')
+    {{-- <script src="{{ asset('js/brand/crud.js') }}"></script> --}}
     <script>
         $(document).ready(function() {
             // loadData()
@@ -98,6 +94,9 @@
                 }
             })
 
+            //get csrf token
+            let _token = $('meta[name="csrf-token"]').attr('content');
+            //getData
             $('#brands_data').DataTable({
                 processing: true,
                 serverSide: true,
@@ -117,6 +116,43 @@
                     data: 'location',
                     name: 'location'
                 }]
+            });
+
+            //StoreData
+            $('#formData').submit(function(e) {
+                e.preventDefault();
+                $('.btn-submit').prop('disabled', true)
+
+                let name = $('#name').val();
+                let location = $('#location').val();
+
+                $.ajax({
+                    type: "post",
+                    url: "{{ route('brand.store') }}",
+                    data: {
+                        name: name,
+                        location:location,
+
+                    },
+                    success: function(response) {
+                        $('#form_add').modal('hide');
+                        alert(`Data sukses disimpan: ${response.data}`);
+                        $('.btn-submit').prop('disabled', false);
+                    },
+                    error: function(xhr, status, error) {
+                        alert(`Terjadi kesalahan: ${xhr.responseText}`);
+                        $('.btn-submit').prop('disabled', false);
+                    }
+
+                })
+            });
+
+
+            $('.btn_modal').click(function(e) {
+                e.preventDefault();
+                $('#name').val('');
+                $('#location').val('');
+                $('#form_add').modal('show')
             });
 
         });
